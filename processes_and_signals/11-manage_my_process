@@ -1,4 +1,4 @@
-!/usr/bin/env bash
+#!/usr/bin/env bash
 # This script Starts/Stops/Restarts manage_my_process script
 
 argv1=$1
