@@ -1,0 +1,49 @@
+#!/usr/bin/env bash
+# manage_my_process script
+
+PID_FILE="/var/run/my_process.pid"
+PROCESS="./manage_my_process"
+
+start () {
+    if [ -e "$PID_FILE" ]; then
+        echo "Error: Process already running (pid $(cat $PID_FILE))"
+        exit 1
+    fi
+
+    $PROCESS &
+    echo $! > "$PID_FILE"
+    echo "manage_my_process started"
+}
+
+stop () {
+    if [ -e "$PID_FILE" ]; then
+        pkill -F "$PID_FILE"
+        rm "$PID_FILE"
+        echo "manage_my_process stopped"
+    else
+        echo "Error: Process is not running"
+        exit 1
+    fi
+}
+
+restart () {
+    if [ -e "$PID_FILE" ]; then
+        stop
+    fi
+
+    start
+    echo "manage_my_process restarted"
+}
+
+case "$1" in
+  start) start ;;
+  stop)  stop ;;
+  restart) restart ;;
+  *)
+    echo "Usage: $0 {start|stop|restart}"
+    exit 1
+    ;;
+esac
+
+exit 0
+
